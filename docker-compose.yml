@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  postgres:
+    container_name: trip-lot-postgres
+    image: postgres:10.4
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: $DB_USERNAME
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: $DB_NAME
+    networks:
+      - global
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - db:/var/lib/postgresql/data
+
+networks:
+  global:
+    name: global
+volumes:
+  redis:
+    driver: local
+  db:
+    driver: local

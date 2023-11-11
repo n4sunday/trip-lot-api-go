@@ -35,3 +35,9 @@ Add the following alias to your .zshrc (or equivalent) to use Air conveniently:
 ```
 alias air='$(go env GOPATH)/bin/air
 ```
+
+### Docker
+Create local database
+```bash
+docker-compose up -d
+```
