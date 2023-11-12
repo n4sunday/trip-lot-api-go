@@ -8,11 +8,21 @@ import (
 	"syscall"
 	"time"
 	"trip-lot-api/config"
+	"trip-lot-api/internal/adapters/handler"
+	"trip-lot-api/routes"
 	"trip-lot-api/store/postgres"
 	"trip-lot-api/store/postgres/migrations"
 
+	userRepo "trip-lot-api/internal/adapters/repository/user/postgres"
+	userService "trip-lot-api/internal/core/user"
+
 	"github.com/labstack/echo/v4"
+	"github.com/subosito/gotenv"
 )
+
+func init() {
+	gotenv.Load()
+}
 
 func main() {
 	e := echo.New()
@@ -30,6 +40,14 @@ func main() {
 
 	// Init Migrations
 	migrations.Migrate(db)
+
+	// Init User
+	userRepo := userRepo.NewUserPgRepository(db)
+	userService := userService.NewUserService(userRepo)
+	userHandler := handler.NewUserHTTPHandler(userService)
+
+	// Routes
+	routes.NewUserRoute(e, userHandler)
 
 	// Start server
 	go func() {

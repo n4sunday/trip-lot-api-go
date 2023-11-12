@@ -13,7 +13,7 @@ func Migrate(db *gorm.DB) {
 		db,
 		gormigrate.DefaultOptions,
 		[]*gormigrate.Migration{
-			// Add migration here
+			m1687075448CreateUserTable(),
 		},
 	)
 
